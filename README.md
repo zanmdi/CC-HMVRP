@@ -31,8 +31,8 @@ A Python-based model for solving the **Chance-Constrained a Heterogeneous and Mu
 Clone the repository:
 
 ```bash
-git clone https://github.com/your-username/multi-shift-vrp-alns.git
-cd multi-shift-vrp-alns
+git clone https://github.com/zanmdi/CC-HMTVRPTW.git
+cd CC-HMTVRPTW
 ```
 Install dependencies:
 
