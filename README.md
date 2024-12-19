@@ -78,7 +78,7 @@ CC-HMVRPTW/
 │   ├── operators.py          # ALNS destroy and repair operators
 │   ├── alns.py               # ALNS algorithm
 │   └── visualize_routes.py   # Route visualization
-├── Exact Solution.py 
+└── Exact Solution.py 
 ```
 
 ---
