@@ -40,7 +40,7 @@ Install dependencies:
 pip install -r requirements.txt
 ```
 
-## 📊 **Usage**
+## **Usage**
 
 ### 1. **Prepare Data**
 
@@ -71,26 +71,29 @@ CC-HMVRPTW/
 │
 ├── README.md
 ├── requirements.txt
-├── main.py
+├── main.py         
 ├── src/
 │   ├── initial_solution.py   # Initial solution generation
 │   ├── cost_function.py      # Cost function calculation
 │   ├── operators.py          # ALNS destroy and repair operators
 │   ├── alns.py               # ALNS algorithm
 │   └── visualize_routes.py   # Route visualization
+├── Exact Solution.py 
 ```
 
 ---
 
-## **Contributing**
+# Reference
 
-Contributions are welcome! Feel free to:
-
-1. Fork the repository.
-2. Create a new branch (`git checkout -b feature-branch`).
-3. Commit your changes (`git commit -m "Add new feature"`).
-4. Push to the branch (`git push origin feature-branch`).
-5. Open a pull request.
-
----
+  ```bibtex
+  @article{,
+    title={},
+    author={},
+    journal={},
+    volume={},
+    number={},
+    pages={},
+    year={},
+    publisher={}
+  }
 
