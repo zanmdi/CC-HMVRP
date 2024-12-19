@@ -51,6 +51,7 @@ def main():
     ])
 
     # Vehicles Data
+    # The fatigue threshold is calculated for each rider based on p=0.95 and aplha_k and beta_k described in the paper
     vehicles = pd.DataFrame([
         {'id': 1, 'mass': 40, 'rider_mass': 70, 'capacity': 50, 'fatigue_threshold': 4, 'battery_range': 10},
         {'id': 2, 'mass': 42, 'rider_mass': 65, 'capacity': 45, 'fatigue_threshold': 3.5, 'battery_range': 9}
