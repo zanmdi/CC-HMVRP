@@ -1,5 +1,6 @@
 from docplex.mp.model import Model
 import math
+from scipy.stats import gamma
 
 # ------------------ Parameters ------------------
 g = 9.81  # Gravitational acceleration (m/s^2)
@@ -9,6 +10,8 @@ B1 = 0.0087  # Bearing coefficient of cargo bike (Ns/m)
 C_D_A = 0.648  # Drag area (m^2)
 v = 5.6  # Velocity (m/s)
 C_RR = 0.006  # Rolling resistance coefficient
+p = 0.95
+
 
 customers = [1, 2, 3]
 vehicles = [1, 2]
@@ -97,8 +100,12 @@ def build_model(relax=False):
     # Fatigue constraint
     for k in vehicles:
         for t in shifts:
-            mdl.add_constraint(mdl.sum(travel_times[i, j] * x[i, j, k, t] for i in nodes for j in nodes if i != j) <= alpha[k] * beta[k])
-
+            # Calculate the inverse Gamma CDF for the given parameters
+            fatigue_limit = gamma.ppf(p, alpha[k], scale=beta[k])
+            mdl.add_constraint(
+                mdl.sum(travel_times[i, j] * x[i, j, k, t] for i in nodes for j in nodes if i != j) <= fatigue_limit
+            )
+        
     # Battery capacity constraint
     for k in vehicles:
         mdl.add_constraint(mdl.sum(v * travel_times[i, j] * x[i, j, k, t] for i in nodes for j in nodes for t in shifts if i != j) <= battery_capacity[k])
