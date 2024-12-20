@@ -1,0 +1,8 @@
+numpy
+pandas
+geopandas
+matplotlib
+shapely
+scipy
+docplex
+pytest
