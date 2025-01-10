@@ -21,9 +21,9 @@ def visualize_routes(customers, depot, solution, shifts):
 
     # Line styles for each shift
     shift_styles = {
-        1: 'o-',   # First shift: Solid line
-        2: 's--',  # Second shift: Dotted line with circles
-        3: '^:'   # Third shift: Dashed line with triangles
+        1: 'o-',   # First shift: Solid line with circles
+        2: 's--',  # Second shift: Dashed line with square
+        3: '^:'   # Third shift: Dotted line with triangles
     }
 
     # Initialize plot
