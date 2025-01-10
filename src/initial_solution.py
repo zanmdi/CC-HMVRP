@@ -14,6 +14,7 @@ def generate_initial_solution(customers, vehicles, shifts):
         shifts: DataFrame with 'E_t' and 'L_t' (shift start and end).
     Returns:
         initial_solution: A dict containing vehicle assignments.
+        set of multi-shift customers: A list containing customers that can be assigned to multiple shifts.
     """
     initial_solution = {}
     multi_shift_customers = set()
