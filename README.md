@@ -31,8 +31,8 @@ A Python-based model for solving the **Chance-Constrained a Heterogeneous and Mu
 Clone the repository:
 
 ```bash
-git clone https://github.com/zanmdi/CC-HMTVRPTW.git
-cd CC-HMTVRPTW
+git clone https://github.com/zanmdi/CC-HMVRP.git
+cd CC-HMVRP
 ```
 Install dependencies:
 
@@ -67,7 +67,7 @@ python main.py
 ## **Project Structure**
 
 ```
-CC-HMVRPTW/
+CC-HMVRP/
 │
 ├── README.md
 ├── requirements.txt
