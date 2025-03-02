@@ -89,7 +89,8 @@ def main():
 
     # Visualize routes
     print("\n--- Route Visualization ---")
-    visualize_routes(customers, depot, solution)
+    
+    visualize_routes(customers.iloc[1:, :].reset_index(drop = True), customers.iloc[:1, :], best_solution)
 
 
 if __name__ == "__main__":
