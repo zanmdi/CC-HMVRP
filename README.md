@@ -86,14 +86,9 @@ CC-HMVRP/
 # Reference
 
   ```bibtex
-  @article{,
-    title={},
-    author={},
-    journal={},
-    volume={},
-    number={},
-    pages={},
-    year={},
-    publisher={}
-  }
+@article{nourmohammadi5142171cargo,
+  title={E-Cargo Bike Route Optimization with Rider Fatigue Considerations: A Chance-Constrained Programming Approach},
+  author={Nourmohammadi, Zahra and Rey, David and Saberi, Meead},
+  journal={Available at SSRN 5142171}
+}
 
