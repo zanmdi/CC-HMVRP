@@ -38,6 +38,7 @@ time_windows = {
 }
 ST = {1: 0, 2: 4.5, 3: 9}
 ET = {1: 4.5, 2: 9, 3: 13.5}
+service_times = {0: 0, 1: 0.5, 2: 0.5, 3: 0.5, 4: 0}
 
 travel_times = {(i, j): 1 for i in nodes for j in nodes if i != j}
 grades = {(i, j): 0.01 for i in nodes for j in nodes if i != j}
@@ -91,23 +92,33 @@ def build_model(relax=False):
                 for i in nodes:
                     mdl.add_constraint(mdl.sum(x[i, j, k, l] for j in nodes if i != j) == y[i, k, l])
                     mdl.add_constraint(mdl.sum(x[j, i, k, l] for j in nodes if i != j) == y[i, k, l])
+
+
+        # (23) Incoming arc consistency
+        for j in customers:
+            for k in vehicles:
+                for l in shifts:
+                    mdl.add_constraint(mdl.sum(x[i, j, k, l] for i in nodes if i != j) == y[j, k, l])
     
-        # (23) Capacity constraint per shift
+        # (24) Capacity constraint per shift
         for k in vehicles:
             for l in shifts:
                 mdl.add_constraint(mdl.sum(demands.get(i, 0) * y[i, k, l] for i in customers) <= bike_capacities[k])
-    
-        # (24-25) Depot visits per shift
+
+
+        # (25) Vehicle depot departure constraint
+        for k in vehicles:
+            mdl.add_constraint(
+                mdl.sum(x[0, j, k, l] for j in customers for l in shifts) <= len(shifts)
+            )
+
+        # (26) Depot balance: departures from start depot = arrivals to end depot
         for k in vehicles:
             for l in shifts:
-                mdl.add_constraint(mdl.sum(x[0, j, k, l] for j in customers) <= 1)
-                mdl.add_constraint(mdl.sum(x[i, nodes[-1], k, l] for i in customers) <= 1)
-    
-        # (26) Flow conservation at all nodes
-        for h in nodes:
-            for k in vehicles:
-                for l in shifts:
-                    mdl.add_constraint(mdl.sum(x[i, h, k, l] for i in nodes if i != h) == mdl.sum(x[h, j, k, l] for j in nodes if j != h))
+                mdl.add_constraint(
+                    mdl.sum(x[0, j, k, l] for j in customers) ==
+                    mdl.sum(x[i, nodes[-1], k, l] for i in customers)
+                )
     
         # (27-29) Load propagation and limit
         for i in nodes:
@@ -122,29 +133,26 @@ def build_model(relax=False):
                     mdl.add_constraint(m[i, k, l] >= demands.get(i, 0))
                     mdl.add_constraint(m[i, k, l] <= bike_capacities[k])
     
-        # (30-32) Time propagation and time windows
+        # (29-30) Time propagation and time windows
         for i in customers:
             for j in nodes:
                 if i != j:
                     for k in vehicles:
                         for l in shifts:
-                            mdl.add_constraint(s[i, k, l] + travel_times[i, j] - W * (1 - x[i, j, k, l]) <= s[j, k, l])
+                            mdl.add_constraint(s[i, k, l] + travel_times[i, j] + service_times[i] - W * (1 - x[i, j, k, l]) <= s[j, k, l])
+
     
         for i in customers:
             for k in vehicles:
                 for l in shifts:
                     mdl.add_constraint(s[i, k, l] + travel_times[i, 0] + Rk - M_reload * (1 - x[i, nodes[-1], k, l]) <= s[nodes[-1], k, l])
     
-        # (33-35) Shift start-end and continuity
-        for k in vehicles:
-            for l in shifts:
-                mdl.add_constraint(s[nodes[-1], k, l] <= ET[l])
-                mdl.add_constraint(s[0, k, l] >= ST[l])
+        # (31) Shift start-end and continuity
         for k in vehicles:
             for l in shifts[:-1]:
                 mdl.add_constraint(s[nodes[-1], k, l] <= s[0, k, l + 1])
     
-        # (36-37) Time windows for customers
+        # (32) Time windows for customers
         for i in customers:
             for k in vehicles:
                 for l in shifts:
@@ -152,17 +160,17 @@ def build_model(relax=False):
                     mdl.add_constraint(s[i, k, l] >= a)
                     mdl.add_constraint(s[i, k, l] <= b)
     
-        # (38) Fatigue constraint
+        # (33) Fatigue constraint
         for k in vehicles:
             for l in shifts:
                 fatigue_limit = gamma.ppf(p, alpha[k], scale=beta[k]) / 60
                 mdl.add_constraint(mdl.sum(travel_times[i, j] * x[i, j, k, l] for i in nodes for j in nodes if i != j) <= fatigue_limit)
     
-        # (39) Battery constraint
+        # (34) Battery constraint
         for k in vehicles:
             mdl.add_constraint(mdl.sum(3.6 * v * travel_times[i, j] * x[i, j, k, l] for i in nodes for j in nodes if i != j for l in shifts) <= battery_capacity[k])
     
-        # (40-42) McCormick linearization for z
+        # (39-42) McCormick linearization for z
         for i in nodes:
             for j in nodes:
                 if i != j:
