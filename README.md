@@ -17,7 +17,7 @@ A Python-based model for solving the **Chance-Constrained a Heterogeneous and Mu
 
 - **Modified ALNS**
   - **Initial Solution Generation**: Based on fatigue-dependent travel times and shift overlaps.
-  - **ALNS Heuristic**: Adaptive algorithm with multiple destroy and repair operators.
+  - **ALNS Heuristic**: Adaptive algorithm with multiple destroy, repair, and local search operators.
 ---
 
 ## **Requirements**
