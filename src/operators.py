@@ -56,6 +56,37 @@ def overlap_removal(solution, customers, overlap_costs, n_remove):
         removed_customers.extend(to_remove)
     return destroyed_solution, removed_customers
 
+
+import random
+
+def worst_route_removal(solution, n_remove, cost_function):
+    """
+    Removes up to n_remove routes with the highest cost.
+    """
+    destroyed_solution = solution.copy()
+    
+    # Compute cost of each route
+    route_costs = []
+    for vehicle, customers in destroyed_solution.items():
+        if customers:  # skip empty routes
+            c = cost_function(vehicle, customers)
+            route_costs.append((vehicle, c))
+    
+    # Sort routes by descending cost (worst first)
+    route_costs.sort(key=lambda x: x[1], reverse=True)
+    
+    # Select up to n_remove worst routes
+    routes_to_remove = route_costs[:min(n_remove, len(route_costs))]
+    
+    removed_routes = []
+    for vehicle, _ in routes_to_remove:
+        removed_customers = destroyed_solution[vehicle]
+        removed_routes.append((vehicle, removed_customers))
+        destroyed_solution[vehicle] = []  # clear the route
+    
+    return destroyed_solution, removed_routes
+
+
 # --- Repair Operators ---
 
 def greedy_insertion(solution, removed_customers, customers, vehicles):
