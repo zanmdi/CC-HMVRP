@@ -1,5 +1,5 @@
 import numpy as np
-from src.operators import random_removal, worst_removal, overlap_removal, greedy_insertion, regret_insertion
+from src.operators import random_removal, worst_removal, overlap_removal, worst_route_removal, greedy_insertion, regret_insertion
 from src.cost_function import augmented_cost_function
 import random
 
@@ -21,7 +21,7 @@ def update_weights(weights, scores, smoothing_factor):
 
 def alns(initial_solution, customers, vehicles, parameters, weights, max_iter=100, smoothing_factor=0.7):
     # Define destroy and repair operators
-    destroy_operators = [random_removal, worst_removal, overlap_removal]
+    destroy_operators = [random_removal, worst_removal, overlap_removal, worst_route_removal]
     repair_operators = [greedy_insertion, regret_insertion]
     
     # Initialize weights and scores for destroy and repair operators
