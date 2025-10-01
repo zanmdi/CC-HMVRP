@@ -68,5 +68,13 @@ def alns(initial_solution, customers, vehicles, parameters, weights, max_iter=10
         
         # Set the current solution to the repaired solution
         current_solution = repaired_solution
+        
+        # === Local Search every 0.25 iterations ===
+        if it % max(1, int(max_iter * 0.25)) == 0 and it > 0:
+            current_solution, current_cost = local_search(
+                current_solution, customers, vehicles, parameters, weights
+            )
+            if current_cost < best_cost:
+                best_solution, best_cost = current_solution, current_cost
     
     return best_solution
